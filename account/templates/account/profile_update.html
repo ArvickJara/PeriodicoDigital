@@ -1,0 +1,64 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+    <link href="{% static 'account/css/profile.css' %}" rel="stylesheet" type="text/css">
+    <script src="https://kit.fontawesome.com/f9c7a50154.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block content %}
+<br>
+<br>
+<br>
+<br>
+    <div id="outer-wrapper">
+        <div id="inner-wrapper">
+            <div>
+                <div id="viewpublicprofile">
+                    <a href="{% url 'profile-view' myuser.slug %}" id="external-links">VER PERFIL PÚBLICO</a>
+                    <i class="fas fa-external-link-alt"></i>
+                </div>
+                <div id="basicinfosection">
+                    <img src="{{ myuser.profile_image.url }}" alt="Profile Picture" id="profile-picture">
+                    <h1 id="username">{{ myuser.username }}</h1>
+                </div>
+            </div>
+
+            <div class="section-container">
+                <h3>Actualizar Perfil</h3>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="field-container">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                    {% endfor %}
+                    <div id="button-container">
+                        <input type="submit" value="ACTUALIZAR" id="submit-btn">
+                    </div>
+                </form>
+            </div>
+
+            <div class="section-container" id="additionalsettingssection">
+                <h3>Ajustes adicionales</h3>
+                
+                <div class="additionalsettingsitem">
+                    <a href="{% url 'password-change' %}" id="external-links">CAMBIAR MI CONTRASEÑA</a>
+                    <i class="fas fa-key"></i>
+                </div>
+                
+                <div class="additionalsettingsitem">
+                    {% if request.user.is_author == False %}
+                    <a href="{% url 'author-request' %}" id="external-links">SOLICITAR CUENTA DE AUTOR</a>
+                    <i class="fas fa-pen-alt"></i>
+                    {% else %}
+                    <a id="external-links" style="color: greenyellow;">¡FELICITACIONES! CUENTA DE AUTOR APROBADA</a>
+                    <i class="fas fa-pen-alt congrats-msg"></i>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
